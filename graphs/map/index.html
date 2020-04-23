@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<link rel="stylesheet" href="d3.slider.css" />
 <style>
 
   .names {
@@ -74,12 +75,19 @@
     .details{
       color:white;
     }
+		#slider3 {
+			margin: 20px 0 10px 20px;
+			width: 900px;
+		}
 
 </style>
 <body>
+	<div id="slider3"></div>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://d3js.org/queue.v1.min.js"></script>
 <script src="https://d3js.org/topojson.v1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
+<script src="d3.slider.js"></script>
 <script src="d3-tip.js"></script>
 <script>
 var format = d3.format(",");
@@ -169,6 +177,22 @@ function ready(data, population) {
        // .datum(topojson.mesh(data.features, function(a, b) { return a !== b; }))
       .attr("class", "names")
       .attr("d", path);
+
+	var minDateUnix = moment('2014-07-01', "YYYY MM DD").unix();
+	var maxDateUnix = moment('2015-07-21', "YYYY MM DD").unix();
+	var secondsInDay = 60 * 60 * 24;
+
+	d3.select('#slider3').call(d3.slider()
+		.axis(true).min(minDateUnix).max(maxDateUnix).step(secondsInDay)
+		.on("slide", function(evt, value) {
+			var newData = _(site_data).filter( function(site) {
+				return site.created_at < value;
+			})
+			// console.log("New set size ", newData.length);
+
+			displaySites(newData);
+		})
+	);
 }
 
 </script>
