@@ -126,7 +126,7 @@ var path = d3.geoPath().projection(projection);
 
 svg.call(tip);
 var promises = [
-	d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson"),
+	d3.json("world.geojson"),
 	d3.tsv("world_population.tsv")
 ];
 
