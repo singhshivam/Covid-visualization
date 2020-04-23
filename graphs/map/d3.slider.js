@@ -80,6 +80,7 @@ return function module() {
       
       var drag = d3.drag();
       drag.on('end', function () {
+				console.log(dispatch)
         dispatch.slideend(d3.event, value);
       })
 
@@ -285,10 +286,12 @@ return function module() {
       if (toType(value) == "array" && value.length == 2) {
         value[ active - 1 ] = newValue;
         if (d3.event) {
+					console.log(dispatch)
           dispatch.slide(d3.event, value );
         };
       } else {
         if (d3.event) {
+					console.log(dispatch)
           dispatch.slide(d3.event.sourceEvent || d3.event, value = newValue);
         };
       }

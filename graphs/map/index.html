@@ -135,8 +135,6 @@ Promise.all(promises).then(function(values) {
 });
 
 function ready(data, population) {
-	console.log('d', data)
-	console.log('p', population)
   var populationById = {};
 
   population.forEach(function(d) { populationById[d.id] = +d.population; });
@@ -185,6 +183,8 @@ function ready(data, population) {
 	d3.select('#slider3').call(d3.slider()
 		.axis(true).min(minDateUnix).max(maxDateUnix).step(secondsInDay)
 		.on("slide", function(evt, value) {
+			console.log(evt)
+			console.log(value)
 			var newData = _(site_data).filter( function(site) {
 				return site.created_at < value;
 			})
