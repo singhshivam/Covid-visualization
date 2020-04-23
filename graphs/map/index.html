@@ -83,9 +83,19 @@
 </style>
 <body>
 	<div id="slider3"></div>
+	<div class="container">
+		<h1>Basic functionality</h1>
+		<h2>Fill</h2>
+		<div class="row align-items-center">
+			<div class="col-sm-2"><p id="value-fill"></p></div>
+			<div class="col-sm"><div id="slider-fill"></div></div>
+		</div>
+	</div>
+
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://d3js.org/queue.v1.min.js"></script>
 <script src="https://d3js.org/topojson.v1.min.js"></script>
+<script src="d3-simple-slider.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
 <script src="d3.slider.js"></script>
 <script src="d3-tip.js"></script>
@@ -193,6 +203,54 @@ function ready(data, population) {
 			displaySites(newData);
 		})
 	);
+
+	// Dates between two dates
+	Date.prototype.addDays = function(days) {
+		var date = new Date(this.valueOf());
+		date.setDate(date.getDate() + days);
+		return date;
+	}
+
+	function getDates(startDate, stopDate) {
+		var dateArray = new Array();
+		var currentDate = startDate;
+		while (currentDate <= stopDate) {
+			dateArray.push(new Date (currentDate));
+			currentDate = currentDate.addDays(1);
+		}
+		return dateArray;
+	}
+	
+	let startDate = new Date(2019, 11, 31)
+	let endDate = new Date(2020, 3, 22)
+	var dateArr = getDates(startDate, endDate)
+
+	// Fill
+	var sliderFill = d3
+		.sliderBottom()
+		.min(d3.min(dateArr))
+		.max(d3.max(dateArr))
+		.width(300)
+		.tickFormat(d3.timeFormat('%b %-d, %Y'))
+		.ticks(5)
+		.default(0.015)
+		.fill('#2196f3')
+		.on('onchange', val => {
+			d3.select('p#value-fill').text(d3.timeFormat('%b %-d, %Y')(val));
+		});
+
+	var gFill = d3
+		.select('div#slider-fill')
+		.append('svg')
+		.attr('width', 500)
+		.attr('height', 100)
+		.append('g')
+		.attr('transform', 'translate(30,30)');
+
+	gFill.call(sliderFill);
+
+	d3.select('p#value-fill').text(d3.format('.2%')(sliderFill.value()));
+
 }
 
 </script>
