@@ -91,112 +91,35 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
 <script src="d3-tip.js"></script>
 <script>
-let format = d3.format(",");
 
-// Set tooltips
-let tip = d3.tip()
-            .attr('class', 'd3-tip')
-            .offset([-10, 0])
-            .html(function(d) {
-              return "<strong>Country: </strong><span class='details'>" + d.properties.name + "<br></span>" + "<strong>Population: </strong><span class='details'>" + format(d.population) +"</span>";
-            })
-
-let margin = {top: 0, right: 0, bottom: 0, left: 0},
-            width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
-
-let color = d3.scaleThreshold()
-    .domain([10000,100000,500000,1000000,5000000,10000000,50000000,100000000,500000000,1500000000])
-    .range(["rgb(247,251,255)", "rgb(222,235,247)", "rgb(198,219,239)", "rgb(158,202,225)", "rgb(107,174,214)", "rgb(66,146,198)","rgb(33,113,181)","rgb(8,81,156)","rgb(8,48,107)","rgb(3,19,43)"]);
-
-let svg = d3.select("body")
-            .append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .append('g')
-            .attr('class', 'map');
-
-let projection = d3.geoMercator()
-                   .scale(130)
-                  .translate( [width / 2, height / 1.5]);
-
-let path = d3.geoPath().projection(projection);
-
-svg.call(tip);
-let promises = [
-	d3.json("world.geojson"),
-	d3.tsv("world_population.tsv"),
-	d3.csv("G3_total-confirmed-cases-of-covid-19-per-million-people.csv")
-];
-
-Promise.all(promises).then((values) => {
-  let [data, population, cases] = values
-	console.log('cases', cases)
-	ready(data, population)
-});
-
-let ready = (data, population) => {
-  let populationById = {};
-
-	console.log(population)
-	population.forEach((d) => { populationById[d.id] = +d.population; });
-	data.features.forEach((d) => { d.population = populationById[d.id] });
-
-  svg.append("g")
-      .attr("class", "countries")
-    .selectAll("path")
-      .data(data.features)
-    .enter().append("path")
-      .attr("d", path)
-		.style("fill", (d) => { return color(populationById[d.id]); })
-      .style('stroke', 'white')
-      .style('stroke-width', 1.5)
-      .style("opacity",0.8)
-      // tooltips
-        .style("stroke","white")
-        .style('stroke-width', 0.3)
-		.on('mouseover', function(d) {
-          tip.show(d);
-
-          d3.select(this)
-            .style("opacity", 1)
-            .style("stroke","white")
-            .style("stroke-width",3);
-        })
-		.on('mouseout', function(d) {
-          tip.hide(d);
-
-          d3.select(this)
-            .style("opacity", 0.8)
-            .style("stroke","white")
-            .style("stroke-width",0.3);
-        });
-
-  svg.append("path")
-		.datum(topojson.mesh(data.features, (a, b) => { return a.id !== b.id; }))
-      .attr("class", "names")
-      .attr("d", path);
-
+let getSlider = (data, datewiseHash) => {
 	// Dates between two dates
 	Date.prototype.addDays = function(days) {
-		let date = new Date(this.valueOf());
-		date.setDate(date.getDate() + days);
-		return date;
+		let date = new Date(this.valueOf())
+		date.setDate(date.getDate() + days)
+		return date
 	}
 
 	let getDates = (startDate, stopDate) => {
-		let dateArray = new Array();
-		let currentDate = startDate;
+		let dateArray = new Array()
+		let currentDate = startDate
 		while (currentDate <= stopDate) {
-			dateArray.push(new Date (currentDate));
-			currentDate = currentDate.addDays(1);
+			dateArray.push(new Date (currentDate))
+			currentDate = currentDate.addDays(1)
 		}
-		return dateArray;
+		return dateArray
 	}
 	
 	let startDate = new Date(2019, 11, 31)
 	let endDate = new Date(2020, 3, 22)
 	let dateArr = getDates(startDate, endDate)
+
+	let dateStr = (d) => {
+		return d3.timeFormat('%b %-d, %Y')(d)
+	}
+
+	// Initialize CurrDate
+	let currDate = d3.max(dateArr)
 
 	// Fill
 	let sliderFill = d3
@@ -206,11 +129,13 @@ let ready = (data, population) => {
 		.width(300)
 		.tickFormat(d3.timeFormat('%b %-d, %Y'))
 		.ticks(5)
-		.default(0.015)
+		.default(d3.max(dateArr))
 		.fill('#2196f3')
 		.on('onchange', val => {
-			d3.select('p#value-fill').text(d3.timeFormat('%b %-d, %Y')(val));
-		});
+			currDate = val
+			d3.select('p#value-fill').text(dateStr(currDate))
+			ready(data, datewiseHash, dateStr(currDate))
+		})
 
 	let gFill = d3
 		.select('div#slider-fill')
@@ -218,11 +143,119 @@ let ready = (data, population) => {
 		.attr('width', 500)
 		.attr('height', 100)
 		.append('g')
-		.attr('transform', 'translate(30,30)');
+		.attr('transform', 'translate(30,30)')
 
-	gFill.call(sliderFill);
+	gFill.call(sliderFill)
 
-	d3.select('p#value-fill').text(d3.timeFormat('%b %-d, %Y')(sliderFill.value()));
+	d3.select('p#value-fill').text(d3.timeFormat('%b %-d, %Y')(sliderFill.value()))
+	
+	// initial call
+	ready(data, datewiseHash, dateStr(currDate))
+
+}
+
+let format = d3.format(",")
+
+// Set tooltips
+let tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(d) {
+              return "<strong>Country: </strong><span class='details'>" + d.properties.name + "<br></span>" + "<strong>Cases: </strong><span class='details'>" + format(d.cases) +"</span>"
+            })
+
+let margin = {top: 0, right: 0, bottom: 0, left: 0},
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom
+
+let color = d3.scaleThreshold()
+    .domain([5,10,50,100,500,1000,2000,5000])
+    .range(["#BBF0D9", "#D8F9ED", "#FFFE4C", "#FFEE00", "#FFBA05", "#F17700","#CE2028","#A11B1B"])
+
+let svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append('g')
+            .attr('class', 'map')
+
+let projection = d3.geoMercator()
+                   .scale(130)
+                  .translate( [width / 2, height / 1.5])
+
+let path = d3.geoPath().projection(projection)
+
+svg.call(tip)
+let promises = [
+	d3.json("world.geojson"),
+	d3.csv("G3_total-confirmed-cases-of-covid-19-per-million-people.csv")
+]
+
+
+Promise.all(promises).then((values) => {
+	let data = values[0]
+	let cases = values[1]
+	let datewiseHash = getDatewiseHash(cases)
+	getSlider(data, datewiseHash)
+})
+
+let getDatewiseHash = (cases) => {
+	let dhash = {}
+	cases.forEach((el) => {
+		dhash[el['Date']] = dhash[el['Date']] || []
+		dhash[el['Date']].push(el)
+	})
+	return dhash
+}
+
+let ready = (data, datewiseHash, currDate) => {
+	let casesByID = {}
+	console.log(datewiseHash)
+	datewiseHash[currDate].forEach((d) => {
+		casesByID[d.Code] = +d['Total confirmed cases of COVID-19 per million people (cases per million)']
+	})
+
+
+  let populationById = {}
+
+	//population.forEach((d) => { populationById[d.id] = +d.population; })
+	data.features.forEach((d) => { d.cases = casesByID[d.id] })
+
+
+  svg.append("g")
+      .attr("class", "countries")
+    .selectAll("path")
+      .data(data.features)
+    .enter().append("path")
+      .attr("d", path)
+		.style("fill", (d) => { return color(casesByID[d.id]); })
+      .style('stroke', 'white')
+      .style('stroke-width', 1.5)
+      .style("opacity",0.8)
+      // tooltips
+        .style("stroke","white")
+        .style('stroke-width', 0.3)
+		.on('mouseover', function(d) {
+          tip.show(d)
+
+          d3.select(this)
+            .style("opacity", 1)
+            .style("stroke","white")
+            .style("stroke-width",3)
+        })
+		.on('mouseout', function(d) {
+          tip.hide(d)
+
+          d3.select(this)
+            .style("opacity", 0.8)
+            .style("stroke","white")
+            .style("stroke-width",0.3)
+        })
+
+  svg.append("path")
+		.datum(topojson.mesh(data.features, (a, b) => { return a.id !== b.id; }))
+      .attr("class", "names")
+      .attr("d", path)
 
 }
 
