@@ -58,3 +58,21 @@ data: https://drive.google.com/open?id=1Sm5fqHT4WfkMW5kUkNrVKZRAUGNflPfF
 data-source: https://ourworldindata.org/coronavirus#what-is-the-total-number-of-confirmed-deaths
 implementation-reference: https://ourworldindata.org/coronavirus#what-is-the-total-number-of-confirmed-deaths
 ```
+
+G6:
+```
+	name: "Epidemic Span"
+	type: gantt-chart
+	data:
+	data-source:
+	implementation-reference: ['https://www.kaggle.com/imdevskp/covid-19-analysis-visualization-comparisons', 'http://bl.ocks.org/lorenzopub/d5e7389adc5abba111d849e357df2d00']
+```
+
+G7:
+```
+	name: "Litrature Clustering"
+	type: k-mean clustering
+	data:
+	data-source:
+	implementation-reference: 'https://maksimekin.github.io/COVID19-Literature-Clustering/plots/t-sne_covid-19_interactive.html'
+```
