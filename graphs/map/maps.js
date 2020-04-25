@@ -1,4 +1,4 @@
-let getSlider = (data, datewiseHash, svg) => {
+let getSlider = (data, datewiseHash, svg, sliderName, identifier) => {
     // Dates between two dates
     Date.prototype.addDays = function (days) {
         let date = new Date(this.valueOf())
@@ -39,12 +39,12 @@ let getSlider = (data, datewiseHash, svg) => {
         .fill('#2196f3')
         .on('onchange', val => {
             currDate = val
-            d3.select('p#value-fill').text(dateStr(currDate))
-            plotConfirmedCases(data, datewiseHash, dateStr(currDate), svg)
+            d3.select(`p#${sliderName}-value-fill`).text(dateStr(currDate))
+            plotConfirmedCases(data, datewiseHash, dateStr(currDate), svg, identifier)
         })
 
     let gFill = d3
-        .select('div#slider-fill')
+        .select(`div#${sliderName}-slider-fill`)
         .append('svg')
         .attr('width', 500)
         .attr('height', 100)
@@ -53,22 +53,41 @@ let getSlider = (data, datewiseHash, svg) => {
 
     gFill.call(sliderFill)
 
-    d3.select('p#value-fill').text(d3.timeFormat('%b %-d, %Y')(sliderFill.value()))
+    d3.select(`p#${sliderName}-value-fill`).text(d3.timeFormat('%b %-d, %Y')(sliderFill.value()))
 
     // initial call
-    plotConfirmedCases(data, datewiseHash, dateStr(currDate), svg)
+    plotConfirmedCases(data, datewiseHash, dateStr(currDate), svg, identifier)
 
 }
 
 let format = d3.format(",")
 
 // Set SVGs and tooltips
-let tip = d3.tip()
+let casesTip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function (d) {
+        console.log(d)
+        let cases = d.cases ? format(d.cases) : "Data unavailable"
+        return "<strong>Country: </strong><span class='details'>"
+                + d.properties.name
+                + "<br></span>" 
+                + "<strong>Cases: </strong><span class='details'>" 
+                + cases 
+                + "</span>"
+    })
+
+let deathsTip = d3.tip()
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function (d) {
         let cases = d.cases ? format(d.cases) : "Data unavailable"
-        return "<strong>Country: </strong><span class='details'>" + d.properties.name + "<br></span>" + "<strong>Cases: </strong><span class='details'>" + cases + "</span>"
+        return "<strong>Country: </strong><span class='details'>"
+                + d.properties.name
+                + "<br></span>" 
+                + "<strong>Cases: </strong><span class='details'>" 
+                + cases 
+                + "</span>"
     })
 
 let margin = { top: 0, right: 0, bottom: 0, left: 0 },
@@ -99,7 +118,8 @@ let projection = d3.geoMercator()
 
 let path = d3.geoPath().projection(projection)
 
-casesSvg.call(tip)
+casesSvg.call(casesTip)
+deathsSvg.call(deathsTip)
 
 
 
@@ -115,28 +135,32 @@ let getDatewiseHash = (cases) => {
 
 let promises = [
     d3.json("world.geojson"),
-    d3.csv("G3_total-confirmed-cases-of-covid-19-per-million-people.csv")
+    d3.csv("G3_total-confirmed-cases-of-covid-19-per-million-people.csv"),
+    d3.csv("G4_total-deaths-covid-19.csv")
 ]
 
 Promise.all(promises).then((values) => {
-    let data = values[0]
-    let cases = values[1]
-    let datewiseHash = getDatewiseHash(cases)
-    getSlider(data, datewiseHash, casesSvg)
+    let [data, cases, deaths] = values
+    let casesDatewise = getDatewiseHash(cases)
+    let deathsDatewise = getDatewiseHash(deaths)
+    let casesIdentifier = 'Total confirmed cases of COVID-19 per million people (cases per million)'
+    let deathsIdentifier = 'Total confirmed deaths due to COVID-19 (deaths)'
+    getSlider(data, casesDatewise, casesSvg, 's1', casesIdentifier)
+    getSlider(data, deathsDatewise, deathsSvg, 's2', deathsIdentifier)
 })
 
-let plotConfirmedCases = (data, datewiseHash, currDate, svg) => {
+let plotConfirmedCases = (data, datewiseHash, currDate, svg, identifier) => {
     let casesByID = {}
     datewiseHash[currDate].forEach((d) => {
-        casesByID[d.Code] = +d['Total confirmed cases of COVID-19 per million people (cases per million)']
+        casesByID[d.Code] = +d[identifier]
     })
 
-
-    let populationById = {}
+    let tip = identifier.includes('deaths') ? deathsTip : casesTip
 
     //population.forEach((d) => { populationById[d.id] = +d.population; })
     data.features.forEach((d) => { d.cases = casesByID[d.id] })
 
+    console.log(identifier, casesByID)
 
     svg.append("g")
         .attr("class", "countries")
