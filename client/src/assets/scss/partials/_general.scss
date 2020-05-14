@@ -881,3 +881,25 @@ p.text-muted {
     -webkit-font-smoothing: antialiased;
 }
 /* material icon for material datetime picker */
+
+/* Custom styles - Shivam */
+div.tooltip-line {
+	position: absolute;
+	text-align: center;
+	padding: .5rem;
+	background: #FFFFFF;
+	color: #313639;
+	border: 1px solid #313639;
+	border-radius: 8px;
+	pointer-events: none;
+	font-size: 1.0rem;
+}
+.grid line {
+	stroke: lightgrey;
+	stroke-opacity: 0.7;
+	shape-rendering: crispEdges;
+}
+.grid path {
+	stroke-width: 0;
+}
+
