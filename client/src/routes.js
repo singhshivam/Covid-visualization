@@ -5,10 +5,10 @@ window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
 
-const DashboardDefault = React.lazy(() => import('./Dashboard/Default'));
+const MultiLine = React.lazy(() => import('./Dashboard/MultiLine'));
 
 const routes = [
-    { path: '/dashboard/default', exact: true, name: 'Covid-19 Home', component: DashboardDefault },
+    { path: '/multi-lines', exact: true, name: 'Covid-19 Home', component: MultiLine },
 ];
 
 export default routes;
