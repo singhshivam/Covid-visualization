@@ -19,6 +19,13 @@ export default {
                     type: 'item',
                     url: '/maps',
                     icon: 'feather icon-map',
+                },
+                {
+                    id: 'tsne',
+                    title: 'T-SNE',
+                    type: 'item',
+                    url: '/t-sne',
+                    icon: 'feather icon-layers',
                 }
             ]
         }
