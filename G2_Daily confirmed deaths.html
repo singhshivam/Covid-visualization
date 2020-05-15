@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+   div.tooltip-donut {
+     position: absolute;
+     text-align: center;
+     padding: .5rem;
+     background: #FFFFFF;
+     color: #313639;
+     border: 1px solid #313639;
+     border-radius: 8px;
+     pointer-events: none;
+     font-size: 1.3rem;
+}
+</style>
+<script src="https://d3js.org/d3.v4.js"></script>
+<div id="my_dataviz"></div>
+<script>
+   var margin = {top: 10, right: 30, bottom: 30, left: 60},
+       width = 1160 - margin.left - margin.right,
+       height = 500 - margin.top - margin.bottom;
+   
+   var svg = d3.select("#my_dataviz")
+     .append("svg")
+       .attr("width", width + margin.left + margin.right)
+       .attr("height", height + margin.top + margin.bottom)
+     .append("g")
+       .attr("transform",
+             "translate(" + margin.left + "," + margin.top + ")");
+   
+   d3.csv("covid.csv", function(data) {
+   
+     var sumstat = d3.nest() 
+       .key(function(d) { return d.Entity;})
+       .entries(data);
+   
+     var x = d3.scaleLinear()
+   				.domain([0, d3.max(data, function(d) { return +d.fivedeath; })])
+   				.range([0,width]);
+     
+     svg.append("g")
+       .attr("transform", "translate(0," + height + ")")
+       .call(d3.axisBottom(x).ticks(25));
+   svg.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                           (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("Five Deaths");
+     var y = d3.scaleLinear()
+       .domain([0, d3.max(data, function(d) { return +d.deaths; })])
+       .range([ height, 0 ]);
+     svg.append("g")
+       .call(d3.axisLeft(y));
+    
+   svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("Deaths");
+   
+     var res = sumstat.map(function(d){ return d.key })
+     var color = d3.scaleOrdinal()
+       .domain(res)
+       .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+   var div = d3.select("body").append("div")
+     .attr("class", "tooltip-donut")
+     .style("opacity", 0);
+    const lines = svg.selectAll(".line")
+         .data(sumstat)
+         .enter()
+         .append("path")
+           .attr("fill", "none")
+           .attr("stroke", function(d){ return color(d.key) })
+           .attr("stroke-width", 1.5)
+           .attr("d", function(d){
+             return d3.line()
+               .x(function(d) { return x(d.fivedeath); })
+               .y(function(d) { return y(+d.deaths); })
+               (d.values)
+           })
+   
+    .on('mouseover', function(d,i) {
+        const selection = d3.select(this).raise();
+        selection
+            .transition()
+            .duration("10")
+            .attr("stroke", function(d){ return color(d.key) })
+            .attr("opacity","0.85")
+            .attr("stroke-width",3.5)
+   div.transition()
+               .duration(50)
+               .style("opacity", 1);
+   div.html(d.key)
+     .style("left", (d3.event.pageX + 10) + "px")
+     .style("top", (d3.event.pageY - 15) + "px");
+        })
+   
+   
+    .on('mouseout', function(d,i) {
+        const selection = d3.select(this)
+        selection
+            .transition()
+            .duration("10")
+            .attr("stroke", function(d){ return color(d.key) })
+            .attr("opacity","1")
+            .attr("stroke-width",1.5);
+   div.transition()
+               .duration('50')
+               .style("opacity", 0);
+   
+    });
+   	
+   })		  
+   		   
+</script>
