@@ -4,6 +4,7 @@ import { Row, Col, Card } from 'react-bootstrap';
 import * as d3 from 'd3'
 import d3Tip from "d3-tip"
 import { sliderBottom } from 'd3-simple-slider'
+//import topojson from 'topojson'
 
 import Aux from "../hoc/_Aux";
 
@@ -186,7 +187,7 @@ class Maps extends React.Component {
                 .style("stroke", "white")
                 .style('stroke-width', 0.3)
                 .on('mouseover', function (d) {
-                    //tip.show(d)
+                    tip.show(d, this)
 
                     d3.select(this)
                         .style("opacity", 1)
@@ -194,7 +195,7 @@ class Maps extends React.Component {
                         .style("stroke-width", 3)
                 })
                 .on('mouseout', function (d) {
-                    //tip.hide(d)
+                    tip.hide(d, this)
 
                     d3.select(this)
                         .style("opacity", 0.8)

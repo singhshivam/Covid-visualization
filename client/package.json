@@ -25,7 +25,8 @@
     "react-scripts": "^3.0.0",
     "react-window-size": "^1.2.2",
     "redux": "^4.0.4",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "topojson": "^3.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
