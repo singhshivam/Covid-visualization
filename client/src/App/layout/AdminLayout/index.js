@@ -64,7 +64,6 @@ class AdminLayout extends Component {
                         <div className="pcoded-wrapper">
                             <div className="pcoded-content">
                                 <div className="pcoded-inner-content">
-                                    <Breadcrumb />
                                     <div className="main-body">
                                         <div className="page-wrapper">
                                             <Suspense fallback={<Loader/>}>
