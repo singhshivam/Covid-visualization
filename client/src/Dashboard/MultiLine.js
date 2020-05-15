@@ -83,7 +83,8 @@ class MultiLine extends React.Component {
                 let div = d3.select(".graph-body").append("div")
                     .attr("class", "tooltip-line")
                     .style("opacity", 0);
-                const lines = svg.selectAll(".line")
+                
+                svg.selectAll(".line")
                     .data(covid)
                     .enter()
                     .append("path")
@@ -93,8 +94,7 @@ class MultiLine extends React.Component {
                     .attr("d", function (d) {
                         return d3.line()
                             .x(function (d) { return x(d.fivedeath); })
-                            .y(function (d) { return y(d.deaths); })
-                            (d.values)
+                            .y(function (d) { return y(d.deaths); })(d.values)
                     })
 
                     .on('mouseover', function (d, i) {
@@ -138,11 +138,13 @@ class MultiLine extends React.Component {
         return (
             <Aux>
                 <Row>
+                    <div className="graph-body">
+                    </div>
                     <Col md={12} xl={12}>
                         <Card>
                             <Card.Body>
                                 <h6 className='mb-4'>Daily Sales</h6>
-                                <div className="row d-flex align-items-center graph-body">
+                                <div className="row d-flex align-items-center">
                                     <div className="col-12 g4-confirmed-deaths">
                                     </div>
                                 </div>

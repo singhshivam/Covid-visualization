@@ -10,8 +10,15 @@ export default {
                     id: 'multi-line',
                     title: 'Multi-lines',
                     type: 'item',
-                    url: '/dashboard/default',
-                    icon: 'feather icon-home',
+                    url: '/multi-lines',
+                    icon: 'feather icon-trending-up',
+                },
+                {
+                    id: 'maps',
+                    title: 'Maps',
+                    type: 'item',
+                    url: '/maps',
+                    icon: 'feather icon-map',
                 }
             ]
         }

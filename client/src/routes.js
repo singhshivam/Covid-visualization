@@ -6,9 +6,11 @@ window.$ = $;
 global.jQuery = $;
 
 const MultiLine = React.lazy(() => import('./Dashboard/MultiLine'));
+const Maps = React.lazy(() => import('./Dashboard/Maps'));
 
 const routes = [
-    { path: '/multi-lines', exact: true, name: 'Covid-19 Home', component: MultiLine },
+    { path: '/multi-lines', exact: true, name: 'Multi-lines Visualization', component: MultiLine },
+    { path: '/maps', exact: true, name: 'Map Visualization', component: Maps },
 ];
 
 export default routes;
