@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 
 import * as d3 from 'd3'
+import d3Tip from "d3-tip"
 
 import Aux from "../hoc/_Aux";
 
@@ -50,7 +51,7 @@ class MultiLine extends React.Component {
                     "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta",
                     "Mauritania", "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro",
                     "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nepal", "Netherlands",
-                    "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North America",
+                    "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria",
                     "Northern Mariana Islands", "Norway", "Oceania", "Oman", "Pakistan", "Palestine",
                     "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal",
                     "Puerto Rico", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis",
@@ -61,7 +62,7 @@ class MultiLine extends React.Component {
                     "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tanzania",
                     "Thailand", "Timor", "Togo", "Trinidad and Tobago", "Tunisia", "Turkey",
                     "Turks and Caicos Islands", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom",
-                    "United States", "United States Virgin Islands", "Upper middle income", "Uruguay",
+                    "United States", "United States Virgin Islands", "Uruguay",
                     "Uzbekistan", "Vatican", "Venezuela", "Vietnam",
                     "Yemen", "Zambia", "Zimbabwe"]
 
@@ -120,6 +121,22 @@ class MultiLine extends React.Component {
                     .attr("class", "tooltip-line")
                     .style("opacity", 0);
 
+                // Set SVGs and tooltips
+                let tip = d3Tip()
+                    .attr('class', 'd3-tip')
+                    .offset([-10, 0])
+                    .html(function (d) {
+                        console.log('tip', d)
+                        let cases = d.values[d.values.length-1]
+                        return `<strong>Country: </strong>
+                            <span class='details'>
+                                ${d.key}<br>
+                            </span>
+                            <strong>${cases.deaths} </strong>
+                            <span class='details'> 
+                            deaths in ${cases.fivedeath} days
+                            </span>`
+                    })
                 svg.selectAll(".line")
                     .data(dataByCountry)
                     .enter()
@@ -136,7 +153,7 @@ class MultiLine extends React.Component {
                         }
                     })
                     .on('mouseover', function (d, i) {
-                        console.log(d)
+                        tip.show(d, this)
                         const selection = d3.select(this).raise();
                         selection
                             .transition()
@@ -147,14 +164,9 @@ class MultiLine extends React.Component {
                         div.transition()
                             .duration(50)
                             .style("opacity", 1);
-
-                        if (d.values[i]) {
-                            div.html(d.key + "</br>" + d.values[i].deaths + " deaths")
-                                .style("left", (d3.event.pageX + 10) + "px")
-                                .style("top", (d3.event.pageY - 15) + "px");
-                        }
                     })
                     .on('mouseout', function (d, i) {
+                        tip.hide(d, this)
                         const selection = d3.select(this)
                         selection
                             .transition()
@@ -168,13 +180,14 @@ class MultiLine extends React.Component {
 
                     });
 
+                svg.call(tip)
             })
     }
     render() {
         return (
             <Aux>
-                    <div className="graph-body">
-                    </div>
+                <div className="graph-body">
+                </div>
                 <Row>
                     <Col md={12} xl={12}>
                         <Card>
