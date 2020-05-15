@@ -77,8 +77,7 @@ class Maps extends React.Component {
             .attr('class', 'd3-tip')
             .offset([-10, 0])
             .html(function (d) {
-                console.log(d)
-                let cases = d.cases ? format(d.cases) : "Data unavailable"
+                let cases = (d.cases == 0 || d.cases) ? format(d.cases) : "Data unavailable"
                 return "<strong>Country: </strong><span className='details'>"
                     + d.properties.name
                     + "<br></span>"
@@ -92,7 +91,6 @@ class Maps extends React.Component {
             .offset([-10, 0])
             .html(function (d) {
                 let cases = d.cases ? format(d.cases) : "Data unavailable"
-                console.log('tips getting printed')
                 return "<strong>Country: </strong><span className='details'>"
                     + d.properties.name
                     + "<br></span>"
@@ -116,7 +114,7 @@ class Maps extends React.Component {
             .append('g')
             .attr('class', 'map')
 
-        let deathsSvg = d3.select("body")
+        let deathsSvg = d3.select(".deaths-map")
             .append("svg")
             .attr("width", width)
             .attr("height", height)
@@ -168,10 +166,7 @@ class Maps extends React.Component {
 
             let tip = identifier.includes('deaths') ? deathsTip : casesTip
 
-            //population.forEach((d) => { populationById[d.id] = +d.population; })
             data.features.forEach((d) => { d.cases = casesByID[d.id] })
-
-            console.log(identifier, casesByID)
 
             svg.append("g")
                 .attr("class", "countries")
@@ -204,11 +199,11 @@ class Maps extends React.Component {
                 })
 
             /*
-        svg.append("path")
-            .datum(topojson.mesh(data.features, (a, b) => { return a.id !== b.id; }))
-            .attr("class", "names")
-            .attr("d", path)
-*/
+            svg.append("path")
+                .datum(topojson.mesh(data.features, (a, b) => { return a.id !== b.id; }))
+                .attr("class", "names")
+                .attr("d", path)
+           */
         }
 
     }
@@ -219,17 +214,19 @@ class Maps extends React.Component {
                     <Col md={12} xl={12}>
                         <Card>
                             <Card.Body>
-                                <h6 className='mb-4'>Daily Sales</h6>
+                                <h6 className='mb-4'>
+                                    Total confirmed cases of COVID-19 per million people (cases per million)
+                                </h6>
                                 <div className="row align-items-center">
                                     <div className="col-sm-2">
                                         <p id="s1-value-fill"></p>
                                     </div>
-                                    <div className="col-sm">
-                                        <div id="s1-slider-fill"></div>
-                                    </div>
                                 </div>
 
                                 <div className="cases-map">
+                                </div>
+                                <div className="col-sm">
+                                    <div id="s1-slider-fill"></div>
                                 </div>
                             </Card.Body>
                         </Card>
@@ -237,17 +234,19 @@ class Maps extends React.Component {
                     <Col md={12} xl={12}>
                         <Card>
                             <Card.Body>
-                                <h6 className='mb-4'>Daily Sales</h6>
+                                <h6 className='mb-4'>
+                                    Total confirmed deaths due to COVID-19 (deaths)
+                                </h6>
                                 <div className="row align-items-center">
                                     <div className="col-sm-2">
                                         <p id="s2-value-fill"></p>
                                     </div>
-                                    <div className="col-sm">
-                                        <div id="s2-slider-fill"></div>
-                                    </div>
                                 </div>
 
                                 <div className="deaths-map">
+                                </div>
+                                <div className="col-sm">
+                                    <div id="s2-slider-fill"></div>
                                 </div>
                             </Card.Body>
                         </Card>
