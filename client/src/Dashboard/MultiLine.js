@@ -29,7 +29,7 @@ class MultiLine extends React.Component {
                 let dataByCountry = d3.nest()
                     .key(function (d) { return d.Entity; })
                     .entries(data);
-    
+
                 let countries = ["Afghanistan", "Africa", "Albania", "Algeria", "Andorra", "Angola", "Anguilla",
                     "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan",
                     "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin",
@@ -134,8 +134,7 @@ class MultiLine extends React.Component {
                                 .y(function (d) { return y(d.deaths); })
                                 (d.values)
                         }
-                        })
-
+                    })
                     .on('mouseover', function (d, i) {
                         console.log(d)
                         const selection = d3.select(this).raise();
@@ -155,7 +154,6 @@ class MultiLine extends React.Component {
                                 .style("top", (d3.event.pageY - 15) + "px");
                         }
                     })
-
                     .on('mouseout', function (d, i) {
                         const selection = d3.select(this)
                         selection
@@ -175,9 +173,9 @@ class MultiLine extends React.Component {
     render() {
         return (
             <Aux>
-                <Row>
                     <div className="graph-body">
                     </div>
+                <Row>
                     <Col md={12} xl={12}>
                         <Card>
                             <Card.Body>
