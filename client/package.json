@@ -1,5 +1,6 @@
 {
   "name": "client",
+	"homepage": "http://singhshivam.github.io/Covid-visualization",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -35,7 +36,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d build"
   },
   "proxy": "http://localhost:5000",
   "eslintConfig": {
@@ -48,6 +51,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "gh-pages": "^2.2.0",
     "react-to-print": "^2.1.1"
   }
 }
