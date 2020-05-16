@@ -106,7 +106,7 @@ class MultiLineGraph extends React.Component {
             let dateRange = moment().range(sDate, eDate)
             let dataByCountry = data
 
-            const countries = ["Afghanistan", "Africa", "Albania", "Algeria", "Andorra", "Angola", "Anguilla",
+            const countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Anguilla",
                 "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan",
                 "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin",
                 "Bermuda", "Bhutan", "Bolivia", "Bonaire Sint Eustatius and Saba", "Bosnia and Herzegovina",
@@ -127,13 +127,13 @@ class MultiLineGraph extends React.Component {
                 "Mauritania", "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro",
                 "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nepal", "Netherlands",
                 "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria",
-                "Northern Mariana Islands", "Norway", "Oceania", "Oman", "Pakistan", "Palestine",
+                "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palestine",
                 "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal",
                 "Puerto Rico", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis",
                 "Saint Lucia", "Saint Vincent and the Grenadines", "San Marino", "Sao Tome and Principe",
                 "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore",
                 "Sint Maarten (Dutch part)", "Slovakia", "Slovenia", "Somalia", "South Africa",
-                "South America", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan",
+                "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan",
                 "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria", "Taiwan", "Tanzania",
                 "Thailand", "Timor", "Togo", "Trinidad and Tobago", "Tunisia", "Turkey",
                 "Turks and Caicos Islands", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom",

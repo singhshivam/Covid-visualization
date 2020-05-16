@@ -215,8 +215,12 @@ class Maps extends React.Component {
                         <Card>
                             <Card.Body>
                                 <h6 className='mb-4'>
-                                    Total confirmed cases of COVID-19 per million people (cases per million)
+                                    What is the total number of confirmed cases?
                                 </h6>
+                                <p>
+                                    The number of confirmed cases is lower than the number of total cases. The main reason for this is limited
+                                    testing.
+                                </p>
                                 <div className="row align-items-center">
                                     <div className="col-sm-2">
                                         <p id="s1-value-fill"></p>
@@ -235,8 +239,12 @@ class Maps extends React.Component {
                         <Card>
                             <Card.Body>
                                 <h6 className='mb-4'>
-                                    Total confirmed deaths due to COVID-19 (deaths)
+                                    Total confirmed deaths
                                 </h6>
+                                <p>
+                                    Limited testing and challenges in the attribution of the cause of death means that the number of confirmed deaths
+                                    may not be an accurate count of the true number of deaths from COVID-19.
+                                </p>
                                 <div className="row align-items-center">
                                     <div className="col-sm-2">
                                         <p id="s2-value-fill"></p>
