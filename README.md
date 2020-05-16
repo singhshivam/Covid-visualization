@@ -1,68 +1,74 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Covid-visualization
 
-## Available Scripts
 
-In the project directory, you can run:
+## Quick Start
 
-### `npm start`
+``` bash
+# Install dependencies
+npm install
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Run the React
+npm start
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+# predeploy
+npm run predeploy
 
-### `npm test`
+# deploy
+npm run deploy
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
 
-### `npm run build`
+## Graphs to add
+G1:
+```
+name: "Total confirmed deaths: how rapidly have they increased compared to other countries?"
+type: multi-line plots
+data: https://drive.google.com/open?id=174YFWu2pdnY2_fkqqcRa_TUXOyJakYxR
+data-source: https://ourworldindata.org/coronavirus 
+implementation-reference: https://ourworldindata.org/coronavirus#total-confirmed-deaths-how-rapidly-have-they-increased-compared-to-other-countries
+```
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+G2:
+```
+name: "Daily confirmed deaths: are we bending the curve?"
+type: multi-line plots
+data: https://drive.google.com/open?id=1OIk4NunCIBn3zbmwCqRY24LdUiocC9aC
+data-source: https://drive.google.com/open?id=1OIk4NunCIBn3zbmwCqRY24LdUiocC9aC
+implementation-reference: https://ourworldindata.org/coronavirus#daily-confirmed-deaths-are-we-bending-the-curve
+```
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+G3:
+```
+name: "World maps: Confirmed cases relative to the size of the population"
+type: map
+data: https://drive.google.com/open?id=1W4bo5pXq-DyL7h6G0Op-Dq5V8Odb1zSz
+data-source: https://ourworldindata.org/coronavirus#world-maps-confirmed-cases-relative-to-the-size-of-the-population
+implementation-reference: https://ourworldindata.org/coronavirus#world-maps-confirmed-cases-relative-to-the-size-of-the-population
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+G4:
+```
+name: "What is the total number of confirmed deaths?"
+type: map
+data: https://drive.google.com/open?id=1Sm5fqHT4WfkMW5kUkNrVKZRAUGNflPfF
+data-source: https://ourworldindata.org/coronavirus#what-is-the-total-number-of-confirmed-deaths
+implementation-reference: https://ourworldindata.org/coronavirus#what-is-the-total-number-of-confirmed-deaths
+```
 
-### `npm run eject`
+G6:
+```
+name: "Epidemic Span"
+type: gantt-chart
+data:
+data-source:
+implementation-reference: ['https://www.kaggle.com/imdevskp/covid-19-analysis-visualization-comparisons', 'http://bl.ocks.org/lorenzopub/d5e7389adc5abba111d849e357df2d00']
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+G7:
+```
+name: "Litrature Clustering"
+type: k-mean clustering
+data:
+data-source:
+implementation-reference: 'https://maksimekin.github.io/COVID19-Literature-Clustering/plots/t-sne_covid-19_interactive.html'
+```
