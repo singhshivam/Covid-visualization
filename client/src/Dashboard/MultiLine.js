@@ -8,6 +8,10 @@ import Aux from "../hoc/_Aux"
 import TotalConfirmedDeaths from './TotalConfirmedDeaths'
 
 import { Slider, createMuiTheme } from '@material-ui/core'
+import Moment from 'moment'
+import { extendMoment } from 'moment-range';
+const moment = extendMoment(Moment);
+
 
 class MultiLine extends React.Component {
     constructor(props) {
@@ -68,9 +72,12 @@ class MultiLine extends React.Component {
     }
 
     populateGraph() {
-        const { data, svg, width, height, margin } = this.state
+        const { data, svg, width, height, margin, value, dateArr } = this.state
         if (data.length > 0 && svg) {
             svg.selectAll("*").remove()
+            let sDate = dateArr[value[0]]
+            let eDate = dateArr[value[1]]
+            let dateRange = moment().range(sDate, eDate)
             let dataByCountry = data
 
             const countries = ["Afghanistan", "Africa", "Albania", "Algeria", "Andorra", "Angola", "Anguilla",
@@ -89,7 +96,7 @@ class MultiLine extends React.Component {
                 "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland",
                 "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan",
                 "Kenya", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Liberia",
-                "Libya", "Liechtenstein", "Lithuania", "Low income", "Lower middle income", "Luxembourg",
+                "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
                 "Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta",
                 "Mauritania", "Mauritius", "Mexico", "Moldova", "Monaco", "Mongolia", "Montenegro",
                 "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nepal", "Netherlands",
@@ -188,10 +195,14 @@ class MultiLine extends React.Component {
                 .attr("stroke-width", 1.5)
                 .attr("d", function (d) {
                     if (countries.includes(d.key)) {
+                        let vals = d.values.filter(row => {
+                            let _date = moment(row.Date, "MMM D, YYYY")
+                            return dateRange.contains(_date)
+                        })
                         return d3.line()
                             .x(function (d) { return x(d.fivedeath); })
                             .y(function (d) { return y(d.deaths); })
-                            (d.values)
+                            (vals)
                     }
                 })
                 .on('mouseover', function (d, i) {
@@ -268,13 +279,15 @@ class MultiLine extends React.Component {
                                 <Slider
                                     theme={muiTheme}
                                     min={0}
-                                    max={dateArr.length}
+                                    max={dateArr.length-1}
                                     value={value}
                                     onChange={this.handleChange}
                                     valueLabelDisplay="auto"
                                     aria-labelledby="range-slider"
                                     getAriaValueText={this.valueText}
-                                    valueLabelFormat={(x) => dateArr[x].toLocaleDateString(undefined, options)}
+                                    valueLabelFormat={(x) => {
+                                        return dateArr[x] ? dateArr[x].toLocaleDateString(undefined, options) : x
+                                    }}
                                 />
                             </Card.Body>
                         </Card>
