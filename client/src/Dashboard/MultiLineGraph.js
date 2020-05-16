@@ -16,7 +16,17 @@ const moment = extendMoment(Moment);
 class MultiLineGraph extends React.Component {
     constructor(props) {
         super(props)
-        this.state = { data: [], dateArr: [], value: [] }
+        this.state = {
+            data: [], dateArr: [], value: [], countryToRegion: {},
+            colorCode: {
+                "Asia": "#008080",
+                "Europe": "#ffa500",
+                "Africa": "#00ff00",
+                "Oceania": "#0000ff",
+                "Americas": "#ff1493"
+
+            }
+        }
 
         this.fetchCSV = this.fetchCSV.bind(this)
         this.populateGraph = this.populateGraph.bind(this)
@@ -24,12 +34,25 @@ class MultiLineGraph extends React.Component {
         this.dateRange = this.dateRange.bind(this)
         this.handleChange = this.handleChange.bind(this)
         this.valueText = this.valueText.bind(this)
+        this.fetchRegions = this.fetchRegions.bind(this)
     }
 
     componentDidMount() {
         this.fetchCSV()
+        this.fetchRegions()
         this.setSVG()
         this.dateRange()
+    }
+
+    fetchRegions() {
+        d3.csv("/region.csv")
+            .then(res => {
+                let countryToRegion = {}
+                res.forEach(c => {
+                    countryToRegion[c['alpha-3']] = c.region
+                })
+                this.setState({countryToRegion: countryToRegion})
+            })
     }
 
     dateRange() {
@@ -74,7 +97,7 @@ class MultiLineGraph extends React.Component {
     }
 
     populateGraph() {
-        const { data, svg, width, height, margin, value, dateArr } = this.state
+        const { data, svg, width, height, margin, value, dateArr, colorCode, countryToRegion } = this.state
         const { yLimit } = this.props
         if (data.length > 0 && svg) {
             svg.selectAll("*").remove()
@@ -194,7 +217,11 @@ class MultiLineGraph extends React.Component {
                 .enter()
                 .append("path")
                 .attr("fill", "none")
-                .attr("stroke", function (d) { return color(d.key) })
+                .attr("stroke", function (d) {
+                    let val = d.values[0]
+                    let code = val ? val.Code : d.key
+                    return colorCode[countryToRegion[code]] || "#000"
+                })
                 .attr("stroke-width", 1.5)
                 .attr("d", function (d) {
                     if (countries.includes(d.key)) {
@@ -214,7 +241,11 @@ class MultiLineGraph extends React.Component {
                     selection
                         .transition()
                         .duration("10")
-                        .attr("stroke", function (d) { return color(d.key) })
+                        .attr("stroke", function (d) {
+                            let val = d.values[0]
+                            let code = val ? val.Code : d.key
+                            return colorCode[countryToRegion[code]] || "#000"
+                        })
                         .attr("opacity", "0.85")
                         .attr("stroke-width", 3.5)
                     div.transition()
@@ -227,7 +258,11 @@ class MultiLineGraph extends React.Component {
                     selection
                         .transition()
                         .duration("10")
-                        .attr("stroke", function (d) { return color(d.key) })
+                        .attr("stroke", function (d) { 
+                            let val = d.values[0]
+                            let code = val ? val.Code : d.key
+                            return colorCode[countryToRegion[code]] || "#000"
+                        })
                         .attr("opacity", "1")
                         .attr("stroke-width", 1.5)
                     div.transition()
