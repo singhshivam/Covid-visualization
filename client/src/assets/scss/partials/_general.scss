@@ -971,3 +971,57 @@ div.tooltip-line {
   .details {
     color: white;
   }
+
+  .axis {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+text {
+  fill: #727075;
+  stroke: none;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: none;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+}
+
+.grid path {
+  stroke: none;
+}
+
+.grid line {
+  stroke: #E0E0E0;
+  shape-rendering: crispEdges;
+}
+
+.data-line {
+  fill: none;
+  stroke: #3C92BA;
+  stroke-width: 4px;
+}
+
+.data-circle {
+  fill: #3C92BA;
+}
+.axis-title {
+  text-anchor: end;
+  fill: #5D6971;
+  font-weight: normal;
+}
+
+.axis-tspan {
+  font-size: 12px;
+}
+
+.PrivateValueLabel-offset-23 {
+    top: -50px!important;
+}
+.PrivateValueLabel-circle-24 {
+    height: 50px!important;
+    width: 50px!important;
+}
