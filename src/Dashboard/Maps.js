@@ -5,12 +5,13 @@ import * as d3 from 'd3'
 import d3Tip from "d3-tip"
 import { sliderBottom } from 'd3-simple-slider'
 //import topojson from 'topojson'
+import legend from 'd3-svg-legend'
 
 import Aux from "../hoc/_Aux";
 
 class Maps extends React.Component {
     componentDidMount() {
-        let getSlider = (data, datewiseHash, svg, sliderName, identifier) => {
+        let getSlider = (data, datewiseHash, svg, sliderName, identifier, color) => {
             // Dates between two dates
             Date.prototype.addDays = function (days) {
                 let date = new Date(this.valueOf())
@@ -29,7 +30,7 @@ class Maps extends React.Component {
             }
 
             let startDate = new Date(2019, 11, 31)
-            let endDate = new Date(2020, 3, 22)
+            let endDate = new Date(2020, 4, 17)
             let dateArr = getDates(startDate, endDate)
 
             let dateStr = (d) => {
@@ -44,14 +45,14 @@ class Maps extends React.Component {
                 .min(d3.min(dateArr))
                 .max(d3.max(dateArr))
                 .width(300)
-                .tickFormat(d3.timeFormat('%b %-d, %Y'))
-                .ticks(5)
+                .tickFormat(d3.timeFormat('%b %-d'))
+                .ticks(3)
                 .default(d3.max(dateArr))
                 .fill('#2196f3')
                 .on('onchange', val => {
                     currDate = val
                     d3.select(`p#${sliderName}-value-fill`).text(dateStr(currDate))
-                    plotConfirmedCases(data, datewiseHash, dateStr(currDate), svg, identifier)
+                    plotConfirmedCases(data, datewiseHash, dateStr(currDate), svg, identifier, color)
                 })
             let gFill = d3
                 .select(`div#${sliderName}-slider-fill`)
@@ -66,7 +67,7 @@ class Maps extends React.Component {
             d3.select(`p#${sliderName}-value-fill`).text(d3.timeFormat('%b %-d, %Y')(sliderFill.value()))
 
             // initial call
-            plotConfirmedCases(data, datewiseHash, dateStr(currDate), svg, identifier)
+            plotConfirmedCases(data, datewiseHash, dateStr(currDate), svg, identifier, color)
 
         }
 
@@ -90,7 +91,7 @@ class Maps extends React.Component {
             .attr('class', 'd3-tip')
             .offset([-10, 0])
             .html(function (d) {
-                let cases = d.cases ? format(d.cases) : "Data unavailable"
+                let cases = (d.cases == 0 || d.cases) ? format(d.cases) : "Data unavailable"
                 return "<strong>Country: </strong><span className='details'>"
                     + d.properties.name
                     + "<br></span>"
@@ -103,9 +104,12 @@ class Maps extends React.Component {
             width = 960 - margin.left - margin.right,
             height = 500 - margin.top - margin.bottom
 
-        let color = d3.scaleThreshold()
-            .domain([5, 10, 50, 100, 500, 1000, 2000, 5000])
+        let casesColorScale = d3.scaleThreshold()
+            .domain([10, 50, 100, 500, 10000, 100000, 500000, 1000000, 5000000])
             .range(["#FF9B54", "#E6854A", "#CD6F3F", "#B45935", "#9A422A", "#812C20", "#681615", "#4F000B"])
+        let deathsColorScale = d3.scaleThreshold()
+            .domain([5, 10, 50, 100, 500, 10000, 25000])
+            .range(["#FEEBE2", "#FCC5C0", "#F99FB5", "#F668A1", "#DF5597", "#B0447E", "#7C3B77"])
 
         let casesSvg = d3.select(".cases-map")
             .append("svg")
@@ -144,7 +148,7 @@ class Maps extends React.Component {
 
         let promises = [
             d3.json("/world.geojson"),
-            d3.csv("/G3_total-confirmed-cases-of-covid-19-per-million-people.csv"),
+            d3.csv("/G3_total-cases-covid-19.csv"),
             d3.csv("/G4_total-deaths-covid-19.csv")
         ]
 
@@ -152,13 +156,13 @@ class Maps extends React.Component {
             let [data, cases, deaths] = values
             let casesDatewise = getDatewiseHash(cases)
             let deathsDatewise = getDatewiseHash(deaths)
-            let casesIdentifier = 'Total confirmed cases of COVID-19 per million people (cases per million)'
+            let casesIdentifier = 'cases'
             let deathsIdentifier = 'Total confirmed deaths due to COVID-19 (deaths)'
-            getSlider(data, casesDatewise, casesSvg, 's1', casesIdentifier)
-            getSlider(data, deathsDatewise, deathsSvg, 's2', deathsIdentifier)
+            getSlider(data, casesDatewise, casesSvg, 's1', casesIdentifier, casesColorScale)
+            getSlider(data, deathsDatewise, deathsSvg, 's2', deathsIdentifier, deathsColorScale)
         })
 
-        let plotConfirmedCases = (data, datewiseHash, currDate, svg, identifier) => {
+        let plotConfirmedCases = (data, datewiseHash, currDate, svg, identifier, color) => {
             let casesByID = {}
             datewiseHash[currDate].forEach((d) => {
                 casesByID[d.Code] = +d[identifier]
@@ -204,6 +208,25 @@ class Maps extends React.Component {
                 .attr("class", "names")
                 .attr("d", path)
            */
+            let ordinal = d3.scaleOrdinal()
+                .domain(["No Data", ...color.domain()])
+                .range(["#000000", ...color.range()])
+            svg.append("g")
+                .attr("class", "legendOrdinal")
+                .attr("transform", "translate(20,350)");
+
+            let legendOrdinal = legend.legendColor()
+                .labelFormat(d3.format(",.2r"))
+                //d3 symbol creates a path-string, for example
+                //"M0,-8.059274488676564L9.306048591020996,
+                //8.059274488676564 -9.306048591020996,8.059274488676564Z"
+                .shape("path", d3.symbol().type(d3.symbolSquare).size(150)())
+                .shapePadding(10)
+                //use cellFilter to hide the "e" cell
+                .cellFilter(function (d) { return d.label !== "e" })
+                .scale(ordinal)
+            svg.select(".legendOrdinal")
+                .call(legendOrdinal);
         }
 
     }
@@ -239,7 +262,7 @@ class Maps extends React.Component {
                         <Card>
                             <Card.Body>
                                 <h6 className='mb-4'>
-                                    Total confirmed deaths
+                                   What is the total number of confirmed deaths? 
                                 </h6>
                                 <p>
                                     Limited testing and challenges in the attribution of the cause of death means that the number of confirmed deaths

@@ -63,7 +63,7 @@ class TSne extends React.Component {
                     .attr("r", 2)
                     .style("fill", function (d) { return color(parseInt(d['Kernel'])) })
 
-                var legend = svg.selectAll(".legend")
+                let legend = svg.selectAll(".legend")
                     .data(color.domain())
                     .enter().append("g")
                     .attr("class", "legend")
@@ -83,6 +83,12 @@ class TSne extends React.Component {
                     .attr("dy", ".35em")
                     .style("text-anchor", "end")
                     .text(function (d) { return d; });
+                
+                svg.select(".legend")
+                    .append("text")
+                    .text("K-clusters") 
+                    .style("text-anchor", "end")
+                    .attr("transform", "translate(710,0)");
             })
 
     }
