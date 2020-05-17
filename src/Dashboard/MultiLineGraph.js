@@ -10,6 +10,7 @@ import TotalConfirmedDeaths from './TotalConfirmedDeaths'
 import { Slider, createMuiTheme } from '@material-ui/core'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range';
+import legend from 'd3-svg-legend'
 const moment = extendMoment(Moment);
 
 
@@ -25,7 +26,8 @@ class MultiLineGraph extends React.Component {
                 "Oceania": "#0000ff",
                 "Americas": "#ff1493"
 
-            }
+            },
+            activeRegions: ["Asia", "Europe", "Africa", "Oceania", "Americas"]
         }
 
         this.fetchCSV = this.fetchCSV.bind(this)
@@ -35,6 +37,7 @@ class MultiLineGraph extends React.Component {
         this.handleChange = this.handleChange.bind(this)
         this.valueText = this.valueText.bind(this)
         this.fetchRegions = this.fetchRegions.bind(this)
+        this.applyFilter = this.applyFilter.bind(this)
     }
 
     componentDidMount() {
@@ -51,7 +54,7 @@ class MultiLineGraph extends React.Component {
                 res.forEach(c => {
                     countryToRegion[c['alpha-3']] = c.region
                 })
-                this.setState({countryToRegion: countryToRegion})
+                this.setState({ countryToRegion: countryToRegion })
             })
     }
 
@@ -96,8 +99,17 @@ class MultiLineGraph extends React.Component {
             })
     }
 
+    applyFilter(region) {
+        const { activeRegions } = this.state
+        if (activeRegions.includes(region)) {
+            this.setState({activeRegions: activeRegions.filter(item => item !== region)})
+        } else {
+            this.setState({activeRegions: [...activeRegions, region]})
+        }
+    }
+
     populateGraph() {
-        const { data, svg, width, height, margin, value, dateArr, colorCode, countryToRegion } = this.state
+        const { data, svg, width, height, margin, value, dateArr, colorCode, countryToRegion, activeRegions } = this.state
         const { yLimit } = this.props
         if (data.length > 0 && svg) {
             svg.selectAll("*").remove()
@@ -224,7 +236,9 @@ class MultiLineGraph extends React.Component {
                 })
                 .attr("stroke-width", 1.5)
                 .attr("d", function (d) {
-                    if (countries.includes(d.key)) {
+                    let val = d.values[0]
+                    let code = val ? val.Code : d.key
+                    if (countries.includes(d.key) && activeRegions.includes(countryToRegion[code])) {
                         let vals = d.values.filter(row => {
                             let _date = moment(row.Date, "MMM D, YYYY")
                             return dateRange.contains(_date)
@@ -258,7 +272,7 @@ class MultiLineGraph extends React.Component {
                     selection
                         .transition()
                         .duration("10")
-                        .attr("stroke", function (d) { 
+                        .attr("stroke", function (d) {
                             let val = d.values[0]
                             let code = val ? val.Code : d.key
                             return colorCode[countryToRegion[code]] || "#000"
@@ -272,6 +286,31 @@ class MultiLineGraph extends React.Component {
                 })
 
             svg.call(tip)
+
+            let ordinal = d3.scaleOrdinal()
+                .domain(Object.keys(colorCode))
+                .range(Object.values(colorCode))
+            svg.append("g")
+                .attr("class", "legendOrdinal")
+                .attr("transform", "translate(800,20)");
+
+            let legendOrdinal = legend.legendColor()
+                //d3 symbol creates a path-string, for example
+                //"M0,-8.059274488676564L9.306048591020996,
+                //8.059274488676564 -9.306048591020996,8.059274488676564Z"
+                .shape("path", d3.symbol().type(d3.symbolSquare).size(150)())
+                .shapePadding(10)
+                //use cellFilter to hide the "e" cell
+                .cellFilter(function (d) { return d.label !== "e" })
+                .scale(ordinal)
+                .on("cellclick", (region) => {
+                    console.log(region)
+                    this.applyFilter(region)
+                });
+
+            svg.select(".legendOrdinal")
+                .call(legendOrdinal);
+
         }
     }
     handleChange(event, newValue) {
