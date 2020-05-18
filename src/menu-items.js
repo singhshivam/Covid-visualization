@@ -7,6 +7,13 @@ export default {
             icon: 'icon-navigation',
             children: [
                 {
+                    id: 'race-bar',
+                    title: 'Race Bar',
+                    type: 'item',
+                    url: '/race-chart',
+                    icon: 'feather icon-bar-chart',
+                },
+                {
                     id: 'multi-line',
                     title: 'Multi-lines',
                     type: 'item',
