@@ -11,9 +11,11 @@ const TSne = React.lazy(() => import('./Dashboard/TSne'));
 const RaceChart = React.lazy(() => import('./Dashboard/RaceChart'));
 const Gantt = React.lazy(() => import('./Dashboard/Gantt'));
 const Intro = React.lazy(() => import('./Dashboard/Intro'));
+const Histogram = React.lazy(() => import('./Dashboard/Histogram'));
 
 const routes = [
     { path: '/intro', exact: true, name: 'Introduction', component: Intro },
+    { path: '/hist', exact: true, name: 'Histogram', component: Histogram },
     { path: '/multi-lines', exact: true, name: 'Multi-lines Visualization', component: MultiLine },
     { path: '/maps', exact: true, name: 'Map Visualization', component: Maps },
     { path: '/t-sne', exact: true, name: 'T-SNE Visualization', component: TSne },

@@ -113,14 +113,14 @@ class Maps extends React.Component {
 
         let casesSvg = d3.select(".cases-map")
             .append("svg")
-            .attr("width", width)
+            .attr("width", '100%')
             .attr("height", height)
             .append('g')
             .attr('class', 'map')
 
         let deathsSvg = d3.select(".deaths-map")
             .append("svg")
-            .attr("width", width)
+            .attr("width", '100%')
             .attr("height", height)
             .append('g')
             .attr('class', 'map')

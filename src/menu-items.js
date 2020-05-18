@@ -14,6 +14,14 @@ export default {
                     icon: 'feather icon-book',
                 },
                 {
+                    id: 'histogram',
+                    title: 'Histogram',
+                    type: 'item',
+                    url: '/hist',
+                    icon: 'feather icon-bar-chart-2',
+
+                },
+                {
                     id: 'race-bar',
                     title: 'Race Bar',
                     type: 'item',

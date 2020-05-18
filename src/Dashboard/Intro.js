@@ -15,7 +15,7 @@ class Intro extends React.Component {
                                 Introduction to COVID-19
                             </h6>
                             <p>
-                                <img src={`${window.appURL}/coronavirus.jpg`} style={{maxWidth: "1000px"}}/>
+                                <img src={`${window.appURL}/coronavirus.jpg`} style={{width: "100%"}}/>
                             </p>
                             <p>
                                 <strong>Coronavirus</strong> is a family of viruses that can cause illness,

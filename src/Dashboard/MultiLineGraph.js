@@ -75,7 +75,7 @@ class MultiLineGraph extends React.Component {
             height = 600 - margin.top - margin.bottom
         let svg = d3.select(`.${graphID}`)
             .append("svg")
-            .attr("width", width + margin.left + margin.right)
+            .attr("width", '100%')
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform",
@@ -344,10 +344,10 @@ class MultiLineGraph extends React.Component {
                     {description}
                 </p>
                 <div className="row d-flex align-items-center">
-                    <div className={`col-12 ${graphID}`}>
-                    </div>
                 </div>
                 <Col md={12} xl={12}>
+                    <div className={`${graphID}`}>
+                    </div>
                     <Col md={12} xl={12}>
                         <Slider
                             theme={muiTheme}

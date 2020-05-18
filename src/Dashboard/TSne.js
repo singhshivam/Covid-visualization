@@ -20,7 +20,7 @@ class TSne extends React.Component {
         // append the svg object to the body of the page
         let svg = d3.select(".my_dataviz")
             .append("svg")
-            .attr("width", width + margin.left + margin.right)
+            .attr("width", '100%')
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform",

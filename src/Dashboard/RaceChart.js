@@ -7,7 +7,7 @@ class RaceChart extends React.Component {
     constructor(props) {
         super(props)
 
-        const margin = { top: 20, right: 30, bottom: 40, left: 260 }
+        const margin = { top: 20, right: 30, bottom: 40, left: 100 }
         const width = 960 - margin.left - margin.right
         const height = 400 - margin.top - margin.bottom
         const leftPadding = 5
@@ -42,7 +42,7 @@ class RaceChart extends React.Component {
                     colorMap[d.Country] = d3.hsl(Math.random() * 360, 0.75, 0.75)
                 })
                 const svg = d3.select('.chart').append('svg')
-                    .attr('width', width + margin.left + margin.right)
+                    .attr('width', '100%')
                     .attr('height', height + margin.top + margin.bottom)
                     .append('g')
                     .attr('transform', `translate(${margin.left},${margin.top})`)
