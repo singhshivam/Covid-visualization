@@ -1,18 +1,18 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "30adaf7a5c9592827c9d76a34bda6ccc",
+    "revision": "41cab909a297f0a007dff456a906011b",
     "url": "/Covid-visualization/index.html"
   },
   {
-    "revision": "de265b630129266cbda3",
+    "revision": "a133d28baa16478c41fb",
     "url": "/Covid-visualization/static/css/5.50a05115.chunk.css"
   },
   {
-    "revision": "79d9e5dc6e95996e7917",
+    "revision": "c39444507517a32aca18",
     "url": "/Covid-visualization/static/css/7.996ce19d.chunk.css"
   },
   {
-    "revision": "5ee6a89f3a9a1f099351",
+    "revision": "1c7da59283331215ad7a",
     "url": "/Covid-visualization/static/css/9.76ff2682.chunk.css"
   },
   {
@@ -52,32 +52,32 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Covid-visualization/static/js/2.9a2b247a.chunk.js"
   },
   {
-    "revision": "de265b630129266cbda3",
-    "url": "/Covid-visualization/static/js/5.d9b6a728.chunk.js"
+    "revision": "a133d28baa16478c41fb",
+    "url": "/Covid-visualization/static/js/5.b9df8b81.chunk.js"
   },
   {
     "revision": "4293b73c166bee9865e0",
     "url": "/Covid-visualization/static/js/6.4239fa8c.chunk.js"
   },
   {
-    "revision": "79d9e5dc6e95996e7917",
-    "url": "/Covid-visualization/static/js/7.3bc578b6.chunk.js"
+    "revision": "c39444507517a32aca18",
+    "url": "/Covid-visualization/static/js/7.c3c3ed9c.chunk.js"
   },
   {
     "revision": "60e1496819b030203e42",
     "url": "/Covid-visualization/static/js/8.e2cae711.chunk.js"
   },
   {
-    "revision": "5ee6a89f3a9a1f099351",
-    "url": "/Covid-visualization/static/js/9.1f5aa580.chunk.js"
+    "revision": "1c7da59283331215ad7a",
+    "url": "/Covid-visualization/static/js/9.6b9ebadb.chunk.js"
   },
   {
-    "revision": "78e999e7e68c3a726005",
-    "url": "/Covid-visualization/static/js/main.2029ee62.chunk.js"
+    "revision": "fe0e5e629f47b6af0123",
+    "url": "/Covid-visualization/static/js/main.e005916d.chunk.js"
   },
   {
-    "revision": "c16f909c078373a0499e",
-    "url": "/Covid-visualization/static/js/runtime~main.d44a56eb.js"
+    "revision": "ae534c78332ab7e30b5c",
+    "url": "/Covid-visualization/static/js/runtime~main.7336a1a1.js"
   },
   {
     "revision": "674f50d287a8c48dc19ba404d20fe713",
