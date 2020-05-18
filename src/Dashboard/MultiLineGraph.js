@@ -48,7 +48,7 @@ class MultiLineGraph extends React.Component {
     }
 
     fetchRegions() {
-        d3.csv("/region.csv")
+        d3.csv(`${window.appURL}/region.csv`)
             .then(res => {
                 let countryToRegion = {}
                 res.forEach(c => {

@@ -147,9 +147,9 @@ class Maps extends React.Component {
         }
 
         let promises = [
-            d3.json("/world.geojson"),
-            d3.csv("/G3_total-cases-covid-19.csv"),
-            d3.csv("/G4_total-deaths-covid-19.csv")
+            d3.json(`${window.appURL}/world.geojson`),
+            d3.csv(`${window.appURL}/G3_total-cases-covid-19.csv`),
+            d3.csv(`${window.appURL}/G4_total-deaths-covid-19.csv`)
         ]
 
         Promise.all(promises).then((values) => {

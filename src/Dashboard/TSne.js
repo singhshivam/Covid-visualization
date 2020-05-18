@@ -27,7 +27,7 @@ class TSne extends React.Component {
                 "translate(" + margin.left + "," + margin.top + ")");
 
         //Read the data
-        d3.csv("/scatterplot-tnse.csv")
+        d3.csv(`${window.appURL}/scatterplot-tnse.csv`)
             .then((data) => {
                 console.log(data)
                 // Add X axis

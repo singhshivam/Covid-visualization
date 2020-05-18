@@ -1,6 +1,6 @@
 export default {
     defaultPath: '/multi-lines',
-    basename: '/cse-564', // only at build time to set, like /datta-able
+    basename: '/Covid-visualization', // only at build time to set, like /datta-able
     layout: 'vertical', // vertical, horizontal (not available in lite version)
     preLayout: null, // (not available in lite version)
     collapseMenu: false, // mini-menu

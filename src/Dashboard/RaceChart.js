@@ -33,7 +33,7 @@ class RaceChart extends React.Component {
     }
 
     fetchCSV() {
-        d3.csv("/animated.csv")
+        d3.csv(`${window.appURL}/animated.csv`)
             .then(res => {
                 const { height, width, margin } = this.state
                 let data = this.prepareData(res)

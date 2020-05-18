@@ -21,7 +21,7 @@ class TotalConfirmedDeaths extends React.Component {
         let g = svg.append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        d3.csv("/total-deaths-covid-19.csv")
+        d3.csv(`${window.appURL}/total-deaths-covid-19.csv`)
             .then((origdata) => {
 
                 let data = []

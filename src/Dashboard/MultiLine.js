@@ -25,7 +25,7 @@ class MultiLine extends React.Component {
                                 <MultiLineGraph
                                     title={title}
                                     description={description}
-                                    csvURL="/covid-confirmed-deaths-since-5th-death.csv"
+                                    csvURL={`${window.appURL}/covid-confirmed-deaths-since-5th-death.csv`}
                                     graphID="covid-confirmed-deaths-since-5th-death"
                                     yLimit={1e5}
                                 />
@@ -38,7 +38,7 @@ class MultiLine extends React.Component {
                                 <MultiLineGraph
                                     title="Daily confirmed deaths: are we bending the curve?"
                                     description={"Shown is the 7-day rolling average. Limited testing and challenges in the attribution of the cause of death means that the number of confirmed deaths may not be an accurate count of the true number of deaths from COVID-19."}
-                                    csvURL="/covid-confirmed-daily-deaths-epidemiological-trajectory.csv"
+                                    csvURL={`${window.appURL}/covid-confirmed-daily-deaths-epidemiological-trajectory.csv`}
                                     graphID="covid-confirmed-daily-deaths-epidemiological-trajectory"
                                     yLimit={3e3}
                                 />

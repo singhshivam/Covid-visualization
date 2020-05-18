@@ -33,6 +33,13 @@ export default {
                     type: 'item',
                     url: '/t-sne',
                     icon: 'feather icon-layers',
+                },
+                {
+                    id: 'gantt',
+                    title: 'Gantt Chart',
+                    type: 'item',
+                    url: '/gantt',
+                    icon: 'feather icon-list',
                 }
             ]
         }
