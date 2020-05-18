@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card, Button } from 'react-bootstrap';
 import * as d3 from 'd3'
 
 
@@ -25,6 +25,7 @@ class RaceChart extends React.Component {
         this.drawChart = this.drawChart.bind(this)
         this.drawXAxis = this.drawXAxis.bind(this)
         this.drawBars = this.drawBars.bind(this)
+        this.restartGraph = this.restartGraph.bind(this)
     }
 
     componentDidMount() {
@@ -34,13 +35,18 @@ class RaceChart extends React.Component {
     fetchCSV() {
         d3.csv("/animated.csv")
             .then(res => {
+                const { height, width, margin } = this.state
                 let data = this.prepareData(res)
                 let colorMap = {}
                 res.forEach((d) => {
-                    colorMap[d.Country] = d3.hsl(Math.random()*360,0.75,0.75)
+                    colorMap[d.Country] = d3.hsl(Math.random() * 360, 0.75, 0.75)
                 })
-                console.log(colorMap)
-                this.setState({ data: data, colorMap: colorMap })
+                const svg = d3.select('.chart').append('svg')
+                    .attr('width', width + margin.left + margin.right)
+                    .attr('height', height + margin.top + margin.bottom)
+                    .append('g')
+                    .attr('transform', `translate(${margin.left},${margin.top})`)
+                this.setState({ data: data, colorMap: colorMap, svg: svg })
                 this.drawChart()
             })
     }
@@ -140,14 +146,12 @@ class RaceChart extends React.Component {
 
 
     drawChart() {
-        const { data, height, width, margin } = this.state
+        const { data, height, width, margin, svg } = this.state
+        if (!svg) { return }
         const years = Object.keys(data).map(d => d)
         const lastYear = years[years.length - 1]
-        const svg = d3.select('.chart').append('svg')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-            .append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`)
+
+        svg.selectAll("*").remove()
 
         let startIndex = 0
         let startYear = years[0]
@@ -162,7 +166,7 @@ class RaceChart extends React.Component {
             .padding(0.1)
         let geoAreas = selectedData.map(this.yAccessor)
 
-        d3.select('.year').text(startYear.slice(0,10))
+        d3.select('.year').text(startYear.slice(0, 10))
 
         yScale.domain(geoAreas)
         this.drawXAxis(svg, selectedData, undefined, xScale)
@@ -174,7 +178,7 @@ class RaceChart extends React.Component {
             startIndex += 1
             selectedData = this.removeGeoAreasWithNoData(this.sortData(data[years[startIndex]])).slice(0, 10)
 
-            d3.select('.year').text(years[startIndex].slice(0,10))
+            d3.select('.year').text(years[startIndex].slice(0, 10))
 
             xScale.domain([0, d3.max(selectedData.map(d => d.value))])
             yScale.domain(selectedData.map(this.yAccessor))
@@ -186,7 +190,16 @@ class RaceChart extends React.Component {
                 interval.stop()
             }
         }, 500)
+        this.setState({ interval: interval })
 
+    }
+
+    restartGraph() {
+        const { interval } = this.state
+        if (interval) {
+            interval.stop()
+            this.drawChart()
+        }
     }
 
     render() {
@@ -198,10 +211,19 @@ class RaceChart extends React.Component {
                             <h6 className='mb-4'>
                                 What is the total number of confirmed cases?
                             </h6>
+                            <Row>
+                                <Col md={12} xl={12}>
+                                    <Col md={8} xl={8}>
+                                        <h4 className="chart-title">Date: <span className="year"></span></h4>
+                                    </Col>
+                                    <Col md={4} xl={4}>
+                                        <Button variant="outline-primary" onClick={this.restartGraph}>Restart</Button>{' '}
+                                    </Col>
+                                </Col>
+                            </Row>
                             <div className="col-sm">
                             </div>
                             <div className="wrapper">
-                                <h4 className="chart-title">Date: <span className="year"></span></h4>
                                 <div className="chart"></div>
                                 <p className="source">Data source: The World Bank</p>
                             </div>
