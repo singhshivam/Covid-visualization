@@ -7,6 +7,13 @@ export default {
             icon: 'icon-navigation',
             children: [
                 {
+                    id: 'intro',
+                    title: 'Introduction',
+                    type: 'item',
+                    url: '/intro',
+                    icon: 'feather icon-book',
+                },
+                {
                     id: 'race-bar',
                     title: 'Race Bar',
                     type: 'item',
