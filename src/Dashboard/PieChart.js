@@ -51,16 +51,18 @@ class PieChart extends React.Component {
                             <h6 className='mb-4'>
                                 Total Active Cases
                             </h6>
-                            <Chart
-                                width={'100%'}
-                                height={'300px'}
-                                chartType="PieChart"
-                                loader={<div>Loading Chart</div>}
-                                data={active}
-                                options={{
-                                    title: 'Total Active Cases',
-                                }}
-                            />
+                            <span className="pie-charts">
+                                <Chart
+                                    width={'100%'}
+                                    height={'300px'}
+                                    chartType="PieChart"
+                                    loader={<div>Loading Chart</div>}
+                                    data={active}
+                                    options={{
+                                        title: 'Total Active Cases',
+                                    }}
+                                />
+                            </span>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -70,16 +72,18 @@ class PieChart extends React.Component {
                             <h6 className='mb-4'>
                                 Total Confirmed Cases
                             </h6>
-                            <Chart
-                                width={'100%'}
-                                height={'300px'}
-                                chartType="PieChart"
-                                loader={<div>Loading Chart</div>}
-                                data={confirmed}
-                                options={{
-                                    title: 'Total Confirmed Cases',
-                                }}
-                            />
+                            <span className="pie-charts">
+                                <Chart
+                                    width={'100%'}
+                                    height={'300px'}
+                                    chartType="PieChart"
+                                    loader={<div>Loading Chart</div>}
+                                    data={confirmed}
+                                    options={{
+                                        title: 'Total Confirmed Cases',
+                                    }}
+                                />
+                            </span>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -89,16 +93,18 @@ class PieChart extends React.Component {
                             <h6 className='mb-4'>
                                 Total Recovered Cases
                             </h6>
-                            <Chart
-                                width={'100%'}
-                                height={'300px'}
-                                chartType="PieChart"
-                                loader={<div>Loading Chart</div>}
-                                data={recovered}
-                                options={{
-                                    title: 'Total Recovered Cases',
-                                }}
-                            />
+                            <span className="pie-charts">
+                                <Chart
+                                    width={'100%'}
+                                    height={'300px'}
+                                    chartType="PieChart"
+                                    loader={<div>Loading Chart</div>}
+                                    data={recovered}
+                                    options={{
+                                        title: 'Total Recovered Cases',
+                                    }}
+                                />
+                            </span>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -108,16 +114,18 @@ class PieChart extends React.Component {
                             <h6 className='mb-4'>
                                 Total Deaths
                             </h6>
-                            <Chart
-                                width={'100%'}
-                                height={'300px'}
-                                chartType="PieChart"
-                                loader={<div>Loading Chart</div>}
-                                data={deaths}
-                                options={{
-                                    title: 'Total Deaths',
-                                }}
-                            />
+                            <span className="pie-charts">
+                                <Chart
+                                    width={'100%'}
+                                    height={'300px'}
+                                    chartType="PieChart"
+                                    loader={<div>Loading Chart</div>}
+                                    data={deaths}
+                                    options={{
+                                        title: 'Total Deaths',
+                                    }}
+                                />
+                            </span>
                         </Card.Body>
                     </Card>
                 </Col>
