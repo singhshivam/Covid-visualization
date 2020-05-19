@@ -51,19 +51,27 @@ export default {
                     icon: 'feather icon-map',
                 },
                 {
+                    id: 'gantt',
+                    title: 'Gantt Chart',
+                    type: 'item',
+                    url: '/gantt',
+                    icon: 'feather icon-list',
+                },
+                {
+                    id: 'cluster',
+                    title: 'Country-wise Cluster',
+                    type: 'item',
+                    url: '/cluster',
+                    icon: 'feather icon-map-pin',
+
+                },
+                {
                     id: 'tsne',
                     title: 'T-SNE',
                     type: 'item',
                     url: '/t-sne',
                     icon: 'feather icon-layers',
                 },
-                {
-                    id: 'gantt',
-                    title: 'Gantt Chart',
-                    type: 'item',
-                    url: '/gantt',
-                    icon: 'feather icon-list',
-                }
             ]
         }
     ]
