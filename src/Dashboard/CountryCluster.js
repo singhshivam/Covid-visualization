@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Card, Button } from 'react-bootstrap';
 
 import * as d3 from 'd3'
+import d3Tip from "d3-tip"
 import moment from 'moment'
 import Chart from "react-google-charts"
 
@@ -53,18 +54,46 @@ class CountryCluster extends React.Component {
                     .domain([...Array(5).keys()])
                     .range(["#008080", "#ffa500", "#00ff00", "#0000ff", "#ff1493"])
 
+                // Set SVGs and tooltips
+                let tip = d3Tip()
+                    .attr('class', 'd3-tip')
+                    .offset([-10, 0])
+                    .html(function (d) {
+                        return "<strong>Country: </strong><span className='details'>"
+                            + d['Country/Region']
+                            + "<br></span>"
+                            + "<strong>Cluster: </strong><span className='details'>"
+                            + d.Clusters
+                            + "</span>"
+                    })
+
+                svg.call(tip)
                 // Add dots
                 svg.append('g')
                     .selectAll("dot")
                     .data(data)
                     .enter()
                     .append("circle")
-                    .attr("cx", function (d) { 
-                        return x(+d.Confirmed); 
+                    .attr("cx", function (d) {
+                        return x(+d.Confirmed);
                     })
                     .attr("cy", function (d) { return y(+d.Deaths); })
-                    .attr("r", 2)
+                    .attr("r", function (d) { return +d.Clusters === 1 ? 5 : 2 })
                     .style("fill", function (d) { return color(parseInt(d['Clusters'])) })
+                    .on('mouseover', function (d) {
+                        tip.show(d, this)
+                        d3.select(this)
+                            .style("opacity", 1)
+                            .style("stroke", "white")
+                            .style("stroke-width", 3)
+                    })
+                    .on('mouseout', function (d) {
+                        tip.hide(d, this)
+                        d3.select(this)
+                            .style("opacity", 0.8)
+                            .style("stroke", "white")
+                            .style("stroke-width", 0.3)
+                    })
 
                 let legend = svg.selectAll(".legend")
                     .data(color.domain())
@@ -86,10 +115,10 @@ class CountryCluster extends React.Component {
                     .attr("dy", ".35em")
                     .style("text-anchor", "end")
                     .text(function (d) { return d; });
-                
+
                 svg.select(".legend")
                     .append("text")
-                    .text("K-clusters:") 
+                    .text("K-clusters:")
                     .style("text-anchor", "end")
                     .attr("transform", "translate(150,0)");
             })
@@ -105,11 +134,11 @@ class CountryCluster extends React.Component {
                                 <strong>Goal: </strong> Divide countries in clusters based on Covid data
                             </h6>
                                 We consider the following three features for each country:<br />
-                                <ul>
-                                    <li>Number of Confirmed cases</li>
-                                    <li>Number of Deaths</li>
-                                    <li>Number of Recovered cases</li>
-                                </ul>
+                            <ul>
+                                <li>Number of Confirmed cases</li>
+                                <li>Number of Deaths</li>
+                                <li>Number of Recovered cases</li>
+                            </ul>
                             <a href={`${window.appURL}/clustering_countries.html`} target="_blank" rel="noopener noreferrer">
                                 <Button variant="outline-primary">Click here to see the notebook</Button>{' '}
                             </a>
@@ -239,6 +268,44 @@ class CountryCluster extends React.Component {
                             </h6>
                             <div className="my_dataviz">
                             </div>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={12} xl={12}>
+                    <Card>
+                        <Card.Body>
+                            <h6 className='mb-4'>
+                                Analysis
+                            </h6>
+                            <p>
+                                Cluster 0 is a set of countries which are very less affected, with
+                                comapritively low number of Confimed, Recoverd and Death Cases.
+                                e.g. India, Canada etc.
+                                <br />
+                                <br />
+                                Cluster 1 is set of countries which are severly affected,
+                                with really high number of Confirmed, Recovered and Death Cases.
+                                e.g. United States is the only country which belongs to this Cluster.
+
+                                <br />
+                                <br />
+                                Cluster 3 belongs to countries which are worst affected with high
+                                number of Confirmed Cases but having really good number of Recoverd
+                                Cases, with comparitively low Mortality Rate. e.g. Germany,
+                                Russia, Iran, Brazil etc.
+
+                                <br />
+                                <br />
+                                Cluster 2 belongs to countries which are badly affected with high
+                                 number of Confirmed Cases but having really good number of
+                                 Recoverd Cases, but high Mortality Rate e.g. Italy, Spain etc.
+
+                                <br />
+                                <br />
+                                Cluster 4 is somehow similar to Cluster 2, but high Mortality
+                                Rate compared to Cluster 2 also the number of Active Cases are
+                                high as compared to Cluster 2 e.g. United Kingdom, France etc.
+                            </p>
                         </Card.Body>
                     </Card>
                 </Col>
