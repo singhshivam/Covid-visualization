@@ -101,7 +101,7 @@ class TSne extends React.Component {
                     <Col md={12} xl={12}>
                         <Card>
                             <Card.Body>
-                                <h6 className='mb-4'>Litrature Clustering</h6>
+                                <h6 className='mb-4'>Literature Clustering</h6>
                                 <a href={`${window.appURL}/literature-cluster.html`} target="_blank" rel="noopener noreferrer">
                                     <Button variant="primary">How did we get the data for the scatterplot?</Button>{' '}
                                 </a>
