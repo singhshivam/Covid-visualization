@@ -110,7 +110,7 @@ class CountryCluster extends React.Component {
                                     <li>Number of Deaths</li>
                                     <li>Number of Recovered cases</li>
                                 </ul>
-                            <a>
+                            <a href={`${window.appURL}/clustering_countries.html`} target="_blank" rel="noopener noreferrer">
                                 <Button variant="outline-primary">Click here to see the notebook</Button>{' '}
                             </a>
                         </Card.Body>
