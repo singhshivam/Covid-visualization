@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card, Button } from 'react-bootstrap';
 
 import * as d3 from 'd3'
 
@@ -102,6 +102,9 @@ class TSne extends React.Component {
                         <Card>
                             <Card.Body>
                                 <h6 className='mb-4'>Litrature Clustering</h6>
+                                <a href={`${window.appURL}/literature-cluster.html`} target="_blank" rel="noopener noreferrer">
+                                    <Button variant="primary">How did we get the data for the scatterplot?</Button>{' '}
+                                </a>
                                 <div className="my_dataviz">
                                 </div>
                             </Card.Body>

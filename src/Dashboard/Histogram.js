@@ -10,32 +10,44 @@ class Histogram extends React.Component {
         super(props)
 
         this.state = {
-            data: []
+            data: [],
+            cases: []
         }
 
         this.fetchCSV = this.fetchCSV.bind(this)
+        this.fetchCases = this.fetchCases.bind(this)
     }
 
     componentDidMount() {
         this.fetchCSV()
+        this.fetchCases()
+    }
+
+    fetchCases() {
+        d3.csv(`${window.appURL}/total-cases-per-day.csv`)
+            .then(res => {
+                let data = [["date", "total cases"]]
+                res.forEach(el => {
+                    data.push([moment(el.date, "MMM D, YYYY").toDate(), +el.cases])
+                })
+                this.setState({ cases: data })
+            })
     }
 
     fetchCSV() {
         d3.csv(`${window.appURL}/total-deaths-per-day.csv`)
             .then(res => {
-                console.log(res)
                 let data = [["date", "total deaths"]]
                 res.forEach(el => {
                     data.push([moment(el.date, "MMM D, YYYY").toDate(), +el.deaths])
                 })
-                console.log(data)
                 this.setState({ data: data })
             })
     }
 
 
     render() {
-        const { data } = this.state
+        const { data, cases } = this.state
         const options = {
             legend: { position: "none" },
             hAxis: {
@@ -44,17 +56,33 @@ class Histogram extends React.Component {
         };
         return (
             <Row>
-                <Col md={12} xl={12}>
+                <Col md={6} xl={6}>
                     <Card>
                         <Card.Body>
                             <h6 className='mb-4'>
-                                Distribution of the number of deaths
+                                Distribution of the number of <strong>deaths</strong>
                             </h6>
                             <Chart
                                 chartType="Bar"
                                 width="100%"
                                 height="400px"
                                 data={data}
+                                options={options}
+                            />
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={6} xl={6}>
+                    <Card>
+                        <Card.Body>
+                            <h6 className='mb-4'>
+                                Distribution of the number of <strong>cases</strong>
+                            </h6>
+                            <Chart
+                                chartType="Bar"
+                                width="100%"
+                                height="400px"
+                                data={cases}
                                 options={options}
                             />
                         </Card.Body>
