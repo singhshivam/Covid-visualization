@@ -1028,3 +1028,15 @@ text {
 strong {
     font-weight: bold!important;
 }
+.active-charts path {
+    fill: #f6aa1c;
+}
+.confirmed-charts path {
+    fill: #bc3908;
+}
+.recovered-charts path {
+    fill: #3ab795;
+}
+.death-charts path {
+    fill: red;
+}

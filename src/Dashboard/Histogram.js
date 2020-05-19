@@ -14,7 +14,8 @@ class Histogram extends React.Component {
             cases: [],
             topConfimedCases: [],
             topActiveCases: [],
-            topRecoveredCases: []
+            topRecoveredCases: [],
+            topDeathCases: []
         }
 
         this.fetchCSV = this.fetchCSV.bind(this)
@@ -37,23 +38,31 @@ class Histogram extends React.Component {
                     data.push([el.country, +el.Confirmed, "color: #e5e4e2"])
                 })
 
-                res = res.sort((a,b) => { return a.Active - b.Active} )
+                res = res.sort((a, b) => { return a.Active - b.Active })
                 let active = []
                 res.forEach(el => {
                     active.push([el.country, +el.Active, "color: #f3de8a"])
                 })
 
-                res = res.sort((a,b) => { return a.Recovered - b.Recovered} )
+                res = res.sort((a, b) => { return a.Recovered - b.Recovered })
                 let recovered = []
                 res.forEach(el => {
                     recovered.push([el.country, +el.Recovered, "color: #eb9486"])
                 })
+
+                res = res.sort((a, b) => { return a.Deaths - b.Deaths })
+                let deaths = []
+                res.forEach(el => {
+                    deaths.push([el.country, +el.Deaths, "color: gray"])
+                })
                 this.setState({
-                    topConfimedCases: [header, ...data.reverse().slice(0,10)],
-                    topActiveCases: [["Country", "total active", { role: 'style' }], 
-                        ...active.reverse().slice(0,10)],
-                    topRecoveredCases: [["Country", "total recovered",{ role: 'style' }], 
-                        ...recovered.reverse().slice(0,10)],
+                    topConfimedCases: [header, ...data.reverse().slice(0, 10)],
+                    topActiveCases: [["Country", "total active", { role: 'style' }],
+                    ...active.reverse().slice(0, 10)],
+                    topRecoveredCases: [["Country", "total recovered", { role: 'style' }],
+                    ...recovered.reverse().slice(0, 10)],
+                    topDeathCases: [["Country", "total deaths", { role: "style" }],
+                    ...deaths.reverse().slice(0, 10)],
                 })
             })
 
@@ -83,7 +92,7 @@ class Histogram extends React.Component {
 
 
     render() {
-        const { data, cases, topConfimedCases, topActiveCases, topRecoveredCases } = this.state
+        const { data, cases, topConfimedCases, topActiveCases, topRecoveredCases, topDeathCases } = this.state
         const options = {
             legend: { position: "none" },
             hAxis: {
@@ -92,6 +101,7 @@ class Histogram extends React.Component {
         }
         const horOpt = {
             chartArea: { width: '100%' },
+            legend: { position: "none" },
             hAxis: {
                 title: 'total cases',
                 minValue: 0,
@@ -143,13 +153,15 @@ class Histogram extends React.Component {
                             <h6 className='mb-4'>
                                 Top 10 Countries (Confirmed Cases)
                             </h6>
-                            <Chart
-                                chartType="Bar"
-                                width="100%"
-                                height="400px"
-                                data={topConfimedCases}
-                                options={horOpt}
-                            />
+                            <span className="confirmed-charts">
+                                <Chart
+                                    chartType="Bar"
+                                    width="100%"
+                                    height="400px"
+                                    data={topConfimedCases}
+                                    options={horOpt}
+                                />
+                            </span>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -159,13 +171,15 @@ class Histogram extends React.Component {
                             <h6 className='mb-4'>
                                 Top 10 Countries (Active Cases)
                             </h6>
-                            <Chart
-                                chartType="Bar"
-                                width="100%"
-                                height="400px"
-                                data={topActiveCases}
-                                options={horOpt}
-                            />
+                            <span className="active-charts">
+                                <Chart
+                                    chartType="Bar"
+                                    width="100%"
+                                    height="400px"
+                                    data={topActiveCases}
+                                    options={horOpt}
+                                />
+                            </span>
                         </Card.Body>
                     </Card>
                 </Col>
@@ -175,13 +189,33 @@ class Histogram extends React.Component {
                             <h6 className='mb-4'>
                                 Top 10 Countries (Recovered Cases)
                             </h6>
-                            <Chart
-                                chartType="Bar"
-                                width="100%"
-                                height="400px"
-                                data={topRecoveredCases}
-                                options={horOpt}
-                            />
+                            <span className="recovered-charts">
+                                <Chart
+                                    chartType="Bar"
+                                    width="100%"
+                                    height="400px"
+                                    data={topRecoveredCases}
+                                    options={horOpt}
+                                />
+                            </span>
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={6} xl={6}>
+                    <Card>
+                        <Card.Body>
+                            <h6 className='mb-4'>
+                                Top 10 Countries (Total Deaths)
+                            </h6>
+                            <span className="death-charts">
+                                <Chart
+                                    chartType="Bar"
+                                    width="100%"
+                                    height="400px"
+                                    data={topDeathCases}
+                                    options={horOpt}
+                                />
+                            </span>
                         </Card.Body>
                     </Card>
                 </Col>
