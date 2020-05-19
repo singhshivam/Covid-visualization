@@ -12,7 +12,9 @@ class Histogram extends React.Component {
         this.state = {
             data: [],
             cases: [],
-            topConfimedCases: []
+            topConfimedCases: [],
+            topActiveCases: [],
+            topRecoveredCases: []
         }
 
         this.fetchCSV = this.fetchCSV.bind(this)
@@ -30,12 +32,29 @@ class Histogram extends React.Component {
         d3.csv(`${window.appURL}/countries-confirmed-cases-sorted.csv`)
             .then(res => {
                 let data = []
-                let header = ["Country", "total cases"]
+                let header = ["Country", "total cases", { role: 'style' }]
                 res.forEach(el => {
-                    data.push([el.country, +el.Confirmed])
+                    data.push([el.country, +el.Confirmed, "color: #e5e4e2"])
                 })
 
-                this.setState({ topConfimedCases: [header, ...data.reverse().slice(0,10)] })
+                res = res.sort((a,b) => { return a.Active - b.Active} )
+                let active = []
+                res.forEach(el => {
+                    active.push([el.country, +el.Active, "color: #f3de8a"])
+                })
+
+                res = res.sort((a,b) => { return a.Recovered - b.Recovered} )
+                let recovered = []
+                res.forEach(el => {
+                    recovered.push([el.country, +el.Recovered, "color: #eb9486"])
+                })
+                this.setState({
+                    topConfimedCases: [header, ...data.reverse().slice(0,10)],
+                    topActiveCases: [["Country", "total active", { role: 'style' }], 
+                        ...active.reverse().slice(0,10)],
+                    topRecoveredCases: [["Country", "total recovered",{ role: 'style' }], 
+                        ...recovered.reverse().slice(0,10)],
+                })
             })
 
     }
@@ -64,7 +83,7 @@ class Histogram extends React.Component {
 
 
     render() {
-        const { data, cases, topConfimedCases } = this.state
+        const { data, cases, topConfimedCases, topActiveCases, topRecoveredCases } = this.state
         const options = {
             legend: { position: "none" },
             hAxis: {
@@ -72,7 +91,6 @@ class Histogram extends React.Component {
             }
         }
         const horOpt = {
-            title: '',
             chartArea: { width: '100%' },
             hAxis: {
                 title: 'total cases',
@@ -130,6 +148,38 @@ class Histogram extends React.Component {
                                 width="100%"
                                 height="400px"
                                 data={topConfimedCases}
+                                options={horOpt}
+                            />
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={6} xl={6}>
+                    <Card>
+                        <Card.Body>
+                            <h6 className='mb-4'>
+                                Top 10 Countries (Active Cases)
+                            </h6>
+                            <Chart
+                                chartType="Bar"
+                                width="100%"
+                                height="400px"
+                                data={topActiveCases}
+                                options={horOpt}
+                            />
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={6} xl={6}>
+                    <Card>
+                        <Card.Body>
+                            <h6 className='mb-4'>
+                                Top 10 Countries (Recovered Cases)
+                            </h6>
+                            <Chart
+                                chartType="Bar"
+                                width="100%"
+                                height="400px"
+                                data={topRecoveredCases}
                                 options={horOpt}
                             />
                         </Card.Body>
