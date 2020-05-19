@@ -22,6 +22,14 @@ export default {
 
                 },
                 {
+                    id: 'pie',
+                    title: 'Pie Charts',
+                    type: 'item',
+                    url: '/pie',
+                    icon: 'feather icon-pie-chart',
+
+                },
+                {
                     id: 'race-bar',
                     title: 'Race Bar',
                     type: 'item',

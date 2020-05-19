@@ -12,6 +12,7 @@ const RaceChart = React.lazy(() => import('./Dashboard/RaceChart'));
 const Gantt = React.lazy(() => import('./Dashboard/Gantt'));
 const Intro = React.lazy(() => import('./Dashboard/Intro'));
 const Histogram = React.lazy(() => import('./Dashboard/Histogram'));
+const PieChart = React.lazy(() => import('./Dashboard/PieChart'));
 
 const routes = [
     { path: '/intro', exact: true, name: 'Introduction', component: Intro },
@@ -21,6 +22,7 @@ const routes = [
     { path: '/t-sne', exact: true, name: 'T-SNE Visualization', component: TSne },
     { path: '/race-chart', exact: true, name: 'Race Charts', component: RaceChart },
     { path: '/gantt', exact: true, name: 'Gantt Charts', component: Gantt },
+    { path: '/pie', exact: true, name: 'Pie Charts', component: PieChart },
 ];
 
 export default routes;
