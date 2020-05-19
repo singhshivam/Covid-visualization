@@ -11,16 +11,33 @@ class Histogram extends React.Component {
 
         this.state = {
             data: [],
-            cases: []
+            cases: [],
+            topConfimedCases: []
         }
 
         this.fetchCSV = this.fetchCSV.bind(this)
         this.fetchCases = this.fetchCases.bind(this)
+        this.fetchTopConfimedCases = this.fetchTopConfimedCases.bind(this)
     }
 
     componentDidMount() {
         this.fetchCSV()
         this.fetchCases()
+        this.fetchTopConfimedCases()
+    }
+
+    fetchTopConfimedCases() {
+        d3.csv(`${window.appURL}/countries-confirmed-cases-sorted.csv`)
+            .then(res => {
+                let data = []
+                let header = ["Country", "total cases"]
+                res.forEach(el => {
+                    data.push([el.country, +el.Confirmed])
+                })
+
+                this.setState({ topConfimedCases: [header, ...data.reverse().slice(0,10)] })
+            })
+
     }
 
     fetchCases() {
@@ -47,13 +64,27 @@ class Histogram extends React.Component {
 
 
     render() {
-        const { data, cases } = this.state
+        const { data, cases, topConfimedCases } = this.state
         const options = {
             legend: { position: "none" },
             hAxis: {
                 format: 'd MMM yy'
             }
-        };
+        }
+        const horOpt = {
+            title: '',
+            chartArea: { width: '100%' },
+            hAxis: {
+                title: 'total cases',
+                minValue: 0,
+            },
+            isStacked: true,
+            vAxis: {
+                title: 'Country',
+            },
+            bars: 'horizontal',
+        }
+
         return (
             <Row>
                 <Col md={6} xl={6}>
@@ -84,6 +115,22 @@ class Histogram extends React.Component {
                                 height="400px"
                                 data={cases}
                                 options={options}
+                            />
+                        </Card.Body>
+                    </Card>
+                </Col>
+                <Col md={6} xl={6}>
+                    <Card>
+                        <Card.Body>
+                            <h6 className='mb-4'>
+                                Top 10 Countries (Confirmed Cases)
+                            </h6>
+                            <Chart
+                                chartType="Bar"
+                                width="100%"
+                                height="400px"
+                                data={topConfimedCases}
+                                options={horOpt}
                             />
                         </Card.Body>
                     </Card>

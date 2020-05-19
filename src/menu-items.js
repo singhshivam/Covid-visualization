@@ -15,7 +15,7 @@ export default {
                 },
                 {
                     id: 'histogram',
-                    title: 'Histogram',
+                    title: 'Bar Charts',
                     type: 'item',
                     url: '/hist',
                     icon: 'feather icon-bar-chart-2',
